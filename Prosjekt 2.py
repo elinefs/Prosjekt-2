@@ -1,7 +1,6 @@
-__author__ = 'HaakonGryvill'
 
 alfa = 1.
-beta = 20.
+beta = 2.
 a = alfa/12.
 b = -alfa/24.
 c = 0
@@ -30,7 +29,7 @@ u = [-alfa,-alfa/4.,-alfa/6.,-alfa/24.,-alfa,-alfa/4,-alfa/6,-alfa/24,
      -alfa,-alfa/4,-alfa/6,-alfa/24,-alfa,-alfa/4,-alfa/6,-alfa/24]
 
 
-print(np.linalg.solve(A,u))
+#print(np.linalg.solve(A,u))
 
 # Oppgave 2a:
 N = 10
@@ -39,12 +38,19 @@ u = []
 def u_vektor(N):
     for i in range(N):
         u.append(-alfa)
-            u.append(-alfa/4.)
-                u.append(alfa/6.)
-                    u.append(-alfa/24.)
-                        return u
+        u.append(-alfa/4.)
+        u.append(alfa/6.)
+        u.append(-alfa/24.)
+    return u
+    
+    
 def A_matrise(N):
-    for i in range(N):
+    s = 4*N
+    a = np.zeros((s,s))
+    for i in range(0,s,4):
+        for j in range(i, i+4):
+            A[j][j] = 1
         
         
-        return A
+        
+    return A
