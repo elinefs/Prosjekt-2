@@ -28,11 +28,7 @@ A = [[6,0,0,beta,0,0,0,0,0,0,0,0,-6,0,0,0], # k = 0
 
 u = [-alfa,-alfa/4.,-alfa/6.,-alfa/24.,-alfa,-alfa/4,-alfa/6,-alfa/24,
      -alfa,-alfa/4,-alfa/6,-alfa/24,-alfa,-alfa/4,-alfa/6,-alfa/24]
-"""u = np.transpose(u)
-    for i in range(len(A)):
-    print(len(A[i]),i)
-    
-    """
+
 
 print(np.linalg.solve(A,u))
 
