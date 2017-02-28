@@ -50,7 +50,27 @@ def A_matrise(N):
     for i in range(0,s,4):
         for j in range(i, i+4):
             A[j][j] = 1
-        
-        
-        
+        A[i][i+3] = beta#(i/4)/6
+        if i==0:
+            for j in range(4):
+                A[i+j][s-(4-j)] = -1
+            A[i+1][s-4] = -3
+            A[i+2][s-4] = -3
+            A[i+2][s-3] = -2
+            for j in range(s-4,s):
+                A[i+3][j] = -1
+        else:
+            for j in range(4):
+                A[i+j][i-(4-j)] = -1
+            A[i+1][i-4] = -3
+            A[i+2][i-4] = -3
+            A[i+2][i-3] = -2
+            for j in range(i-4, i):
+                A[i+3][j] = -1
+            
     return A
+
+
+for i in range(16):
+    A = A_matrise(4)
+    print(A[i])
