@@ -8,28 +8,28 @@ d = -alfa/beta
 import numpy as np
 
 # Oppgave 1:
-A = [[6,0,0,beta,0,0,0,0,0,0,0,0,-6,0,0,0], # k = 0
+A1 = [[1,0,0,beta/6,0,0,0,0,0,0,0,0,-1,0,0,0], # k = 0
      [0,1,0,0,0,0,0,0,0,0,0,0,-3,-1,0,0],
      [0,0,1,0,0,0,0,0,0,0,0,0,-3,-2,-1,0],
      [0,0,0,1,0,0,0,0,0,0,0,0,-1,-1,-1,-1],
-     [-6,0,0,0,6,0,0,beta,0,0,0,0,0,0,0,0],# k = 1
+     [-1,0,0,0,1,0,0,beta/6,0,0,0,0,0,0,0,0],# k = 1
      [-3,-1,0,0,0,1,0,0,0,0,0,0,0,0,0,0],
      [-3,-2,-1,0,0,0,1,0,0,0,0,0,0,0,0,0],
      [-1,-1,-1,-1,0,0,0,1,0,0,0,0,0,0,0,0],
-     [0,0,0,0,-6,0,0,0,6,0,0,beta,0,0,0,0], # k = 2
+     [0,0,0,0,-1,0,0,0,1,0,0,beta/6,0,0,0,0], # k = 2
      [0,0,0,0,-3,-1,0,0,0,1,0,0,0,0,0,0],
      [0,0,0,0,-3,-2,-1,0,0,0,1,0,0,0,0,0],
      [0,0,0,0,-1,-1,-1,-1,0,0,0,1,0,0,0,0],
-     [0,0,0,0,0,0,0,0,-6,0,0,0,6,0,0,beta], # k = 3
+     [0,0,0,0,0,0,0,0,-1,0,0,0,1,0,0,beta/6], # k = 3
      [0,0,0,0,0,0,0,0,-3,-1,0,0,0,1,0,0],
      [0,0,0,0,0,0,0,0,-3,-2,-1,0,0,0,1,0],
      [0,0,0,0,0,0,0,0,-1,-1,-1,-1,0,0,0,1]]
 
-u = [-alfa,-alfa/4.,-alfa/6.,-alfa/24.,-alfa,-alfa/4,-alfa/6,-alfa/24,
-     -alfa,-alfa/4,-alfa/6,-alfa/24,-alfa,-alfa/4,-alfa/6,-alfa/24]
+u1 = [-alfa/6,-alfa/4.,-alfa/6.,-alfa/24.,-alfa/6,-alfa/4,-alfa/6,-alfa/24,
+     -alfa/6,-alfa/4,-alfa/6,-alfa/24,-alfa/6,-alfa/4,-alfa/6,-alfa/24]
 
 
-#print(np.linalg.solve(A,u))
+print(np.linalg.solve(A1,u1))
 
 # Oppgave 2a:
 N = 10
@@ -37,16 +37,16 @@ u_test = [-alfa,-alfa/4.,-alfa/6.,-alfa/24.]
 u = []
 def u_vektor(N):
     for i in range(N):
-        u.append(-alfa)
+        u.append(-alfa/6.)
         u.append(-alfa/4.)
-        u.append(alfa/6.)
+        u.append(-alfa/6.)
         u.append(-alfa/24.)
     return u
     
     
 def A_matrise(N):
     s = 4*N
-    a = np.zeros((s,s))
+    A = np.zeros((s,s))
     for i in range(0,s,4):
         for j in range(i, i+4):
             A[j][j] = 1
@@ -70,7 +70,11 @@ def A_matrise(N):
             
     return A
 
+u = u_vektor(4)
+A = A_matrise(4)
 
 for i in range(16):
-    A = A_matrise(4)
     print(A[i])
+
+    
+print(np.linalg.solve(A,u))
