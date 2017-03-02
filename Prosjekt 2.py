@@ -49,7 +49,7 @@ def alpha(masse, l, E, r):
 def beta_k(fjærkonst, l, E, r):
     return ((fjærkonst*l**3)/(E*3.14*r**4/4))
 
-def u_vektor(N):
+def u_vektor(N, alfa):
     u = []
     for i in range(N):
         u.append(-alfa/6.)
@@ -86,7 +86,7 @@ def A_matrise(N, beta):
                 A[i+3][j] = -1
     return A
 
-u = u_vektor(N)
+u = u_vektor(N, alfa)
 beta_liste = np.zeros(N)
 for i in range(N):
     beta_liste[i] = beta #beta_k(fjærkonst, l, E, r)
@@ -101,36 +101,36 @@ eta_dobbeltderivert_verdier=np.zeros(1000*N)
 eta_trippelderivert_verdier=np.zeros(1000*N)
 konstanter = np.linalg.solve(A,u)
 
-def eta(k,ksi):
+def eta(k,ksi,alfa):
     return ((-alfa/24.)*((ksi-k)**4)+(konstanter[4*k]*(ksi-k)**3)
             +(konstanter[4*k+1]*(ksi-k)**2)+(konstanter[4*k+2]*(ksi-k))*konstanter[4*k+3])
 
-def eta_derivert(k,ksi):
+def eta_derivert(k,ksi,alfa):
     return ((-alfa/6.)*((ksi-k)**3)+(3*konstanter[4*k]*(ksi-k)**2)
             +(2*konstanter[4*k+1]*(ksi-k))+(konstanter[4*k+2]))
 
-def eta_dobbeltderivert(k,ksi):
+def eta_dobbeltderivert(k,ksi,alfa):
     return ((-alfa/2.)*((ksi-k)**2)+(6*konstanter[4*k]*(ksi-k))
             +(2*konstanter[4*k+1]))
 
-def eta_trippelderivert(k,ksi):
+def eta_trippelderivert(k,ksi,alfa):
     return (-(alfa*(ksi-k))+6*konstanter[4*k])
 
 for i in range (N):
     for j in range (int(len(ksi)/N)):
-        eta_verdier[j+i*len(ksi)/N]=eta(i,ksi[j+i*len(ksi)/N])
+        eta_verdier[j+i*len(ksi)/N]=eta(i,ksi[j+i*len(ksi)/N], alfa)
 
 for i in range(N):
     for j in range(int(len(ksi)/N)):
-        eta_derivert_verdier[j+i*len(ksi)/N] = eta_derivert(i,ksi[j+i*len(ksi)/N])
+        eta_derivert_verdier[j+i*len(ksi)/N] = eta_derivert(i,ksi[j+i*len(ksi)/N], alfa)
 
 for i in range(N):
     for j in range(int(len(ksi)/N)):
-        eta_dobbeltderivert_verdier[j+i*len(ksi)/N] = eta_dobbeltderivert(i,ksi[j+i*len(ksi)/N])
+        eta_dobbeltderivert_verdier[j+i*len(ksi)/N] = eta_dobbeltderivert(i,ksi[j+i*len(ksi)/N], alfa)
 
 for i in range(N):
     for j in range(int(len(ksi)/N)):
-        eta_trippelderivert_verdier[j+i*len(ksi)/N] = eta_trippelderivert(i,ksi[j+i*len(ksi)/N])
+        eta_trippelderivert_verdier[j+i*len(ksi)/N] = eta_trippelderivert(i,ksi[j+i*len(ksi)/N], alfa)
 
 
 
@@ -182,12 +182,15 @@ def oppgave3(t_max, N):
 
     
     ryker = np.zeros(N)
-    alphaer = np.zeros(N)
+    alphaer = []
     for i in range(N):
         A = A_matrise(N, beta)
-        u = u_vektor(N)
-        konstanter = np.linalg.solve(A,u)
+        u1 = u_vektor(N, 1)
+        konstanter = np.linalg.solve(A,u1)
         rk = r_k(beta, konstanter, tk, N)
+        
+        if eta(i,i, alpha) > tk[i]:
+            alphaer.append()
         temp = np.argmax(rk)
         alphaer[i] = beta[temp]/rk[temp]
         beta[temp] = 0
@@ -197,3 +200,4 @@ def oppgave3(t_max, N):
 
 ryker, alphaer = oppgave3(tmax, N)
 print(ryker)
+print(alphaer)
