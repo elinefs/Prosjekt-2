@@ -59,7 +59,7 @@ def u_vektor(N):
     return u
 
     
-def A_matrise(N, beta):
+def A_matrise(N, beta, alfa):
     s = 4*N
     A = np.zeros((s,s))
     temp = 0
@@ -90,7 +90,7 @@ u = u_vektor(N)
 beta_liste = np.zeros(N)
 for i in range(N):
     beta_liste[i] = beta #beta_k(fjærkonst, l, E, r)
-A = A_matrise(N, beta_liste)
+A = A_matrise(N, beta_liste, alfa)
 
 
 
@@ -184,7 +184,7 @@ def oppgave3(t_max, N):
     ryker = np.zeros(N)
     alphaer = np.zeros(N)
     for i in range(N):
-        A = A_matrise(N, beta)
+        A = A_matrise(N, beta, 1)
         u = u_vektor(N)
         konstanter = np.linalg.solve(A,u)
         rk = r_k(beta, konstanter, tk, N)
@@ -197,3 +197,4 @@ def oppgave3(t_max, N):
 
 ryker, alphaer = oppgave3(tmax, N)
 print(ryker)
+print(alphaer)
