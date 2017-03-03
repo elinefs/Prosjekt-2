@@ -9,7 +9,7 @@ a = alfa/12.
 b = -alfa/24.
 c = 0
 d = -alfa/beta
-N = 10
+N = 20
 
 fjærkonst = 0.1
 l = 5*10**(-9)
@@ -39,15 +39,13 @@ u1 = [-alfa/6,-alfa/4.,-alfa/6.,-alfa/24.,-alfa/6,-alfa/4,-alfa/6,-alfa/24,
      -alfa/6,-alfa/4,-alfa/6,-alfa/24,-alfa/6,-alfa/4,-alfa/6,-alfa/24]
 
 
-print(np.linalg.solve(A1,u1))
-
 # Oppgave 2a:
 
 def alpha(masse, l, E, r):
     return ((9.81*masse*l**3)/(E*3.14*r**4/4))
     
 def beta_k(fjærkonst, l, E, r):
-    return ((fjærkonst*l**3)/(E*3.14*r**4/4))
+    return 10**(8)#((fjærkonst*l**3)/(E*3.14*r**4/4))
 
 def u_vektor(N):
     u = []
@@ -101,53 +99,53 @@ eta_dobbeltderivert_verdier=np.zeros(1000*N)
 eta_trippelderivert_verdier=np.zeros(1000*N)
 konstanter = np.linalg.solve(A,u)
 
-def eta(k,ksi):
+def eta(k,ksi, alfa, konstanter):
     return ((-alfa/24.)*((ksi-k)**4)+(konstanter[4*k]*(ksi-k)**3)
             +(konstanter[4*k+1]*(ksi-k)**2)+(konstanter[4*k+2]*(ksi-k))*konstanter[4*k+3])
 
-def eta_derivert(k,ksi):
+def eta_derivert(k,ksi, alfa, konstanter):
     return ((-alfa/6.)*((ksi-k)**3)+(3*konstanter[4*k]*(ksi-k)**2)
             +(2*konstanter[4*k+1]*(ksi-k))+(konstanter[4*k+2]))
 
-def eta_dobbeltderivert(k,ksi):
+def eta_dobbeltderivert(k,ksi, alfa, konstanter):
     return ((-alfa/2.)*((ksi-k)**2)+(6*konstanter[4*k]*(ksi-k))
             +(2*konstanter[4*k+1]))
 
-def eta_trippelderivert(k,ksi):
+def eta_trippelderivert(k,ksi, alfa, konstanter):
     return (-(alfa*(ksi-k))+6*konstanter[4*k])
 
 for i in range (N):
     for j in range (int(len(ksi)/N)):
-        eta_verdier[j+i*len(ksi)/N]=eta(i,ksi[j+i*len(ksi)/N])
+        eta_verdier[j+i*len(ksi)/N]=eta(i,ksi[j+i*len(ksi)/N], alfa, konstanter)
 
 for i in range(N):
     for j in range(int(len(ksi)/N)):
-        eta_derivert_verdier[j+i*len(ksi)/N] = eta_derivert(i,ksi[j+i*len(ksi)/N])
+        eta_derivert_verdier[j+i*len(ksi)/N] = eta_derivert(i,ksi[j+i*len(ksi)/N], alfa, konstanter)
 
 for i in range(N):
     for j in range(int(len(ksi)/N)):
-        eta_dobbeltderivert_verdier[j+i*len(ksi)/N] = eta_dobbeltderivert(i,ksi[j+i*len(ksi)/N])
+        eta_dobbeltderivert_verdier[j+i*len(ksi)/N] = eta_dobbeltderivert(i,ksi[j+i*len(ksi)/N], alfa, konstanter)
 
 for i in range(N):
     for j in range(int(len(ksi)/N)):
-        eta_trippelderivert_verdier[j+i*len(ksi)/N] = eta_trippelderivert(i,ksi[j+i*len(ksi)/N])
+        eta_trippelderivert_verdier[j+i*len(ksi)/N] = eta_trippelderivert(i,ksi[j+i*len(ksi)/N], alfa, konstanter)
 
 
 
 
 
-plt.plot(ksi,eta_verdier)
-plt.savefig("Oppgave 2a,uderivert.pdf")
-plt.show()
-plt.plot(ksi,eta_derivert_verdier)
-plt.savefig("Oppgave 2a,derivert.pdf")
-plt.show()
-plt.plot(ksi,eta_dobbeltderivert_verdier)
-plt.savefig("Oppgave 2a,dobbeltderivert.pdf")
-plt.show()
-plt.plot(ksi,eta_trippelderivert_verdier,'bo')
-plt.savefig("Oppgave 2a,trippelderivert.pdf")
-plt.show()
+# plt.plot(ksi,eta_verdier)
+# plt.savefig("Oppgave 2a,uderivert.pdf")
+# plt.show()
+# plt.plot(ksi,eta_derivert_verdier)
+# plt.savefig("Oppgave 2a,derivert.pdf")
+# plt.show()
+# plt.plot(ksi,eta_dobbeltderivert_verdier)
+# plt.savefig("Oppgave 2a,dobbeltderivert.pdf")
+# plt.show()
+# plt.plot(ksi,eta_trippelderivert_verdier,'bo')
+# plt.savefig("Oppgave 2a,trippelderivert.pdf")
+# plt.show()
 
 
 
@@ -179,7 +177,7 @@ def oppgave3(t_max, N):
     for i in range(N):
         beta[i] = beta_k(fjærkonst, l, E, r)
     tk = t_k(t_max, N)
-
+    print(tk)
     
     ryker = np.zeros(N)
     alphaer = np.zeros(N)
@@ -192,9 +190,29 @@ def oppgave3(t_max, N):
         alphaer[i] = beta[temp]/rk[temp]
         beta[temp] = 0
         ryker[i] = temp
+    print(ryker)
         
-    return ryker, alphaer 
+    return alphaer 
 
-ryker, alphaer = oppgave3(tmax, N)
-print(ryker)
+alphaer = oppgave3(tmax, N)
 print(alphaer)
+
+n_N_liste = np.zeros(N)
+for i in range(N):
+    n_N_liste[i]= i/N
+
+
+def midlere_alpha(N):
+    alpha_middel = oppgave3(tmax, N)
+    for i in range(N):
+        alpha2 = oppgave3(tmax, N)
+        for j in range(N):
+            alpha_middel[j] = (alpha_middel[j] + alpha2[j])
+    return alpha_middel/N
+    
+#plt.plot(n_N_liste, midlere_alpha(N))
+#plt.show()
+            
+            
+        
+
