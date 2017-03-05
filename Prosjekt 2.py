@@ -9,7 +9,7 @@ a = alfa/12.
 b = -alfa/24.
 c = 0
 d = -alfa/beta
-N = 20
+N = 40
 
 fjærkonst = 0.1
 l = 5*10**(-9)
@@ -57,31 +57,45 @@ def u_vektor(N):
     return u
 
     
-def A_matrise(N, beta, alfa):
+# def A_matrise(N, beta, alfa):
+#     s = 4*N
+#     A = np.zeros((s,s))
+#     temp = 0
+#     for i in range(0,s,4):
+#         for j in range(i, i+4):
+#             A[j][j] = 1
+#         A[i][i+3] = beta[temp]/6
+#         temp += 1
+#         if i==0:
+#             for j in range(4):
+#                 A[i+j][s-(4-j)] = -1
+#             A[i+1][s-4] = -3
+#             A[i+2][s-4] = -3
+#             A[i+2][s-3] = -2
+#             for j in range(s-4,s):
+#                 A[i+3][j] = -1
+#         else:
+#             for j in range(4):
+#                 A[i+j][i-(4-j)] = -1
+#             A[i+1][i-4] = -3
+#             A[i+2][i-4] = -3
+#             A[i+2][i-3] = -2
+#             for j in range(i-4, i):
+#                 A[i+3][j] = -1
+#     return A
+
+def A_matrise(N, beta):
     s = 4*N
-    A = np.zeros((s,s))
-    temp = 0
-    for i in range(0,s,4):
-        for j in range(i, i+4):
-            A[j][j] = 1
+    A = np.identity(s)
+    block = np.matrix('-1 0 0 0; -3 -1 0 0; -3 -2 -1 0;-1 -1 -1 -1')
+    temp = 1
+    for i in range(4,s,4):
+        A[i:i+4,i-4:i] = block
         A[i][i+3] = beta[temp]/6
         temp += 1
-        if i==0:
-            for j in range(4):
-                A[i+j][s-(4-j)] = -1
-            A[i+1][s-4] = -3
-            A[i+2][s-4] = -3
-            A[i+2][s-3] = -2
-            for j in range(s-4,s):
-                A[i+3][j] = -1
-        else:
-            for j in range(4):
-                A[i+j][i-(4-j)] = -1
-            A[i+1][i-4] = -3
-            A[i+2][i-4] = -3
-            A[i+2][i-3] = -2
-            for j in range(i-4, i):
-                A[i+3][j] = -1
+    A[0:4,s-4:s] = block
+    A[0][3] = beta[0]/6
+    #A = sps.dok_matrix(A)
     return A
 
 u = u_vektor(N)
@@ -177,7 +191,7 @@ def oppgave3(t_max, N):
     for i in range(N):
         beta[i] = beta_k(fjærkonst, l, E, r)
     tk = t_k(t_max, N)
-    print(tk)
+    #print(tk)
     
     ryker = np.zeros(N)
     alphaer = np.zeros(N)
@@ -190,7 +204,7 @@ def oppgave3(t_max, N):
         alphaer[i] = beta[temp]/rk[temp]
         beta[temp] = 0
         ryker[i] = temp
-    print(ryker)
+    #print(ryker)
         
     return alphaer 
 
@@ -210,8 +224,8 @@ def midlere_alpha(N):
             alpha_middel[j] = (alpha_middel[j] + alpha2[j])
     return alpha_middel/N
     
-#plt.plot(n_N_liste, midlere_alpha(N))
-#plt.show()
+plt.plot(n_N_liste, midlere_alpha(N))
+plt.show()
             
             
         
