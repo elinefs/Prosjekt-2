@@ -65,7 +65,9 @@ A = A_matrise(N, beta_liste)
 
 
 
-ksi=np.linspace(0,N,1000*N)
+
+
+ksi = np.linspace(0,N,1000*N)
 eta_verdier=np.zeros(1000*N)
 eta_verdier_analytisk= np.zeros(1000*N)
 eta_derivert_verdier=np.zeros(1000*N)
@@ -109,12 +111,18 @@ for i in range(N):
     for j in range(int(len(ksi)/N)):
         eta_dobbeltderivert_verdier[j+i*len(ksi)/N] = eta_dobbeltderivert(i,ksi[j+i*len(ksi)/N], alfa, konstanter)
 
+
 for i in range(N):
     for j in range(int(len(ksi)/N)):
         eta_trippelderivert_verdier[j+i*len(ksi)/N] = eta_trippelderivert(i,ksi[j+i*len(ksi)/N], alfa, konstanter)
 
+differanse = np.zeros(1000*N)
+for i in range(1000*N):
+    differanse[i] = abs(eta_verdier[i]-eta_verdier_analytisk[i])
 
-
+plt.plot(ksi,differanse)
+plt.savefig("differanse.pdf")
+plt.show()
 
 
 # plt.plot(ksi,eta_verdier)
@@ -141,9 +149,15 @@ plt.plot(ksi,eta_derivert_verdier,'g')
 plt.subplot(4,1,3)
 plt.plot(ksi,eta_dobbeltderivert_verdier,'r')
 
-plt.subplot(4,1,4)
-plt.plot(ksi,eta_trippelderivert_verdier,'k.')
 
+for i in range(N):
+    plt.subplot(4,1,4)
+    plt.plot(ksi[1000*i:1000*i+1000],eta_trippelderivert_verdier[1000*i:1000*i+1000],'k')
+
+"""
+plt.subplot(4,1,4)
+plt.plot(ksi[1000:2000],eta_trippelderivert_verdier[1000:2000],'k')
+"""
 plt.savefig("Oppgave2a.pdf")
 plt.show()
 
