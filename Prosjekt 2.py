@@ -1,3 +1,4 @@
+
 import random as random
 import numpy as np
 import matplotlib.pyplot as plt
@@ -9,9 +10,10 @@ a = alfa/12.
 b = -alfa/24.
 c = 0
 d = -alfa/beta
-N = 40
+N = 20
 
-fjærkonst = 0.1
+
+fjaerkonst = 0.1
 l = 5*10**(-9)
 r = 10**(-9)
 E = 300*10**6
@@ -22,10 +24,14 @@ tmax = 1
 # Oppgave 2a:
 
 def alpha(masse, l, E, r):
-    return ((9.81*masse*l**3)/(E*3.14*r**4/4))
+    return ((9.81*masse*l**3)/(E*np.pi*r**4/4))
     
-def beta_k(fjærkonst, l, E, r):
-    return 10**(8)#((fjærkonst*l**3)/(E*3.14*r**4/4))
+def beta_k(fjaerkonst, l, E, r):
+
+    return 10**(8)#((fjaerkonst*l**3)/(E*3.14*r**4/4))
+
+    return ((fjaerkonst*l**3)/(E*np.pi*r**4/4))
+
 
 def u_vektor(N):
     u = []
@@ -54,13 +60,14 @@ def A_matrise(N, beta):
 u = u_vektor(N)
 beta_liste = np.zeros(N)
 for i in range(N):
-    beta_liste[i] = beta #beta_k(fjærkonst, l, E, r)
-A = A_matrise(N, beta_liste, alfa)
+    beta_liste[i] = beta #beta_k(fjaerkonst, l, E, r)
+A = A_matrise(N, beta_liste)
 
 
 
 ksi=np.linspace(0,N,1000*N)
 eta_verdier=np.zeros(1000*N)
+eta_verdier_analytisk= np.zeros(1000*N)
 eta_derivert_verdier=np.zeros(1000*N)
 eta_dobbeltderivert_verdier=np.zeros(1000*N)
 eta_trippelderivert_verdier=np.zeros(1000*N)
@@ -68,7 +75,11 @@ konstanter = np.linalg.solve(A,u)
 
 def eta(k,ksi, alfa, konstanter):
     return ((-alfa/24.)*((ksi-k)**4)+(konstanter[4*k]*(ksi-k)**3)
-            +(konstanter[4*k+1]*(ksi-k)**2)+(konstanter[4*k+2]*(ksi-k))*konstanter[4*k+3])
+            +(konstanter[4*k+1]*(ksi-k)**2)+(konstanter[4*k+2]*(ksi-k))+konstanter[4*k+3])
+
+def eta_analytisk(k,ksi,alfa, beta):
+    return ((-alfa/24.)*((ksi-k)**4)+(a*(ksi-k)**3)
+            +(b*(ksi-k)**2)+(c*(ksi-k))+d)
 
 def eta_derivert(k,ksi, alfa, konstanter):
     return ((-alfa/6.)*((ksi-k)**3)+(3*konstanter[4*k]*(ksi-k)**2)
@@ -81,9 +92,14 @@ def eta_dobbeltderivert(k,ksi, alfa, konstanter):
 def eta_trippelderivert(k,ksi, alfa, konstanter):
     return (-(alfa*(ksi-k))+6*konstanter[4*k])
 
+
 for i in range (N):
     for j in range (int(len(ksi)/N)):
         eta_verdier[j+i*len(ksi)/N]=eta(i,ksi[j+i*len(ksi)/N], alfa, konstanter)
+
+for i in range(N):
+    for j in range(int(len(ksi)/N)):
+        eta_verdier_analytisk[j+i*len(ksi)/N] = eta_analytisk(i,ksi[j+i*len(ksi)/N],alfa,beta)
 
 for i in range(N):
     for j in range(int(len(ksi)/N)):
@@ -114,7 +130,31 @@ for i in range(N):
 # plt.savefig("Oppgave 2a,trippelderivert.pdf")
 # plt.show()
 
+print("test")
+plt.subplot(4,1,1)
+plt.plot(ksi,eta_verdier)
 
+plt.subplot(4,1,2)
+plt.plot(ksi,eta_derivert_verdier,'g')
+
+
+plt.subplot(4,1,3)
+plt.plot(ksi,eta_dobbeltderivert_verdier,'r')
+
+plt.subplot(4,1,4)
+plt.plot(ksi,eta_trippelderivert_verdier,'k.')
+
+plt.savefig("Oppgave2a.pdf")
+plt.show()
+
+plt.subplot(2,1,1)
+plt.plot(ksi,eta_verdier)
+
+plt.subplot(2,1,2)
+plt.plot(ksi,eta_verdier_analytisk,'g')
+
+plt.savefig("numerisk.pdf")
+plt.show()
 
 
 
@@ -142,7 +182,7 @@ def r_k(beta, konstanter, tk, N):
 def oppgave3(t_max, N):
     beta = np.zeros(N)
     for i in range(N):
-        beta[i] = beta_k(fjærkonst, l, E, r)
+        beta[i] = beta_k(fjaerkonst, l, E, r)
     tk = t_k(t_max, N)
     #print(tk)
     
@@ -176,10 +216,10 @@ def midlere_alpha(N):
         for j in range(N):
             alpha_middel[j] = (alpha_middel[j] + alpha2[j])
     return alpha_middel/N
-    
+"""
 plt.plot(n_N_liste, midlere_alpha(N))
 plt.show()
             
-            
+"""
         
 
