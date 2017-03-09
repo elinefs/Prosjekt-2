@@ -2,7 +2,8 @@
 import random as random
 import numpy as np
 import matplotlib.pyplot as plt
-
+import scipy.sparse as sps
+from scipy.sparse.linalg import spsolve
 
 alfa = 1.0610
 beta = 53.0516
@@ -27,9 +28,6 @@ def alpha(masse, l, E, r):
     return ((9.81*masse*l**3)/(E*np.pi*r**4/4))
     
 def beta_k(fjaerkonst, l, E, r):
-
-    return 10**(8)#((fjaerkonst*l**3)/(E*3.14*r**4/4))
-
     return ((fjaerkonst*l**3)/(E*np.pi*r**4/4))
 
 
@@ -138,37 +136,37 @@ plt.show()
 # plt.savefig("Oppgave 2a,trippelderivert.pdf")
 # plt.show()
 
-print("test")
-plt.subplot(4,1,1)
-plt.plot(ksi,eta_verdier)
-
-plt.subplot(4,1,2)
-plt.plot(ksi,eta_derivert_verdier,'g')
-
-
-plt.subplot(4,1,3)
-plt.plot(ksi,eta_dobbeltderivert_verdier,'r')
-
-
-for i in range(N):
-    plt.subplot(4,1,4)
-    plt.plot(ksi[1000*i:1000*i+1000],eta_trippelderivert_verdier[1000*i:1000*i+1000],'k')
-
-"""
-plt.subplot(4,1,4)
-plt.plot(ksi[1000:2000],eta_trippelderivert_verdier[1000:2000],'k')
-"""
-plt.savefig("Oppgave2a.pdf")
-plt.show()
-
-plt.subplot(2,1,1)
-plt.plot(ksi,eta_verdier)
-
-plt.subplot(2,1,2)
-plt.plot(ksi,eta_verdier_analytisk,'g')
-
-plt.savefig("numerisk.pdf")
-plt.show()
+# print("test")
+# plt.subplot(4,1,1)
+# plt.plot(ksi,eta_verdier)
+# 
+# plt.subplot(4,1,2)
+# plt.plot(ksi,eta_derivert_verdier,'g')
+# 
+# 
+# plt.subplot(4,1,3)
+# plt.plot(ksi,eta_dobbeltderivert_verdier,'r')
+# 
+# 
+# for i in range(N):
+#     plt.subplot(4,1,4)
+#     plt.plot(ksi[1000*i:1000*i+1000],eta_trippelderivert_verdier[1000*i:1000*i+1000],'k')
+# 
+# """
+# plt.subplot(4,1,4)
+# plt.plot(ksi[1000:2000],eta_trippelderivert_verdier[1000:2000],'k')
+# """
+# plt.savefig("Oppgave2a.pdf")
+# plt.show()
+# 
+# plt.subplot(2,1,1)
+# plt.plot(ksi,eta_verdier)
+# 
+# plt.subplot(2,1,2)
+# plt.plot(ksi,eta_verdier_analytisk,'g')
+# 
+# plt.savefig("numerisk.pdf")
+# plt.show()
 
 
 
@@ -203,7 +201,7 @@ def oppgave3(t_max, N):
     ryker = np.zeros(N)
     alphaer = np.zeros(N)
     for i in range(N):
-        A = A_matrise(N, beta, 1)
+        A = A_matrise(N, beta)
         u = u_vektor(N)
         konstanter = np.linalg.solve(A,u)
         rk = r_k(beta, konstanter, tk, N)
@@ -230,10 +228,9 @@ def midlere_alpha(N):
         for j in range(N):
             alpha_middel[j] = (alpha_middel[j] + alpha2[j])
     return alpha_middel/N
-"""
+
 plt.plot(n_N_liste, midlere_alpha(N))
 plt.show()
             
-"""
         
 
